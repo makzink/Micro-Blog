@@ -1,0 +1,7 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "lcobucci/jwt": "^3.2",
+        "mongodb/mongodb": "^1.1"
+    }
+}
