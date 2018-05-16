@@ -1,10 +1,13 @@
 <?php
 
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
     if(function_exists('date_default_timezone_set')) date_default_timezone_set("Asia/Kolkata");
 
-    $g_url = "https://www.dailyprepapp.com/modules/mb/jquery/";
-    $g_short_url = "https://ams.dailyprepapp.com";
-    $g_api_url = "https://api100.dailyprepapp.com/mb/php/";
+    $g_url = "http://www.kazmik.in/mb/jq/";
+    $g_api_url = "http://api.kazmik.in/php/";
     $g_cookie_prefix = "_hush_";
 
     $g_audience = $g_url;
@@ -49,9 +52,6 @@
 		$db_no=0;
 
 		$redis = new Redis();
-		$port = 6379;
-		$database = array('engage-redis.zaries.0001.apse1.cache.amazonaws.com');
-   	    $redis->connect($database[$db_no], $port);
    	    return $redis;
 	}
 

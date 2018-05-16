@@ -1,6 +1,6 @@
-var g_url = "https://www.dailyprepapp.com/modules/mb/jquery/";
-var g_api_url = "https://api100.dailyprepapp.com/mb/php/";
-var g_domain = ".dailyprepapp.com";
+var g_url = "http://www.kazmik.in/mb/jq/";
+var g_api_url = "http://api.kazmik.in/php/";
+var g_domain = ".kazmik.in";
 
 $(function(){
 

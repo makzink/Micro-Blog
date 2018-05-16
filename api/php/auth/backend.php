@@ -36,11 +36,11 @@
                                 ->getToken();
             $token = (string)$token;
             /*store the token in redis*/
-            $rdb = redisDB(0);
-            $rdb->set($token_key,json_encode(array("token"=>$token)));
-            $res = $token_key.' : '.$rdb->get($token_key);
-            /*set the ttl*/
-            $rdb->expireat($token_key,$time+$g_token_expiry);
+            $user_list = json_decode(file_get_contents('auth/user.json'), true);
+            $user_list[$token_key] = json_encode(array("token"=>$token));
+            file_put_contents('auth/user.json', json_encode($user_list));
+
+            $res = $token_key;
             /*return result*/
             $result = array("status"=>1,"token"=>$token,"expiry"=>$time+$g_token_expiry,"msg"=>"User token created sucessfully","css"=>"alert alert-success",'res'=>$res);
         }
@@ -94,8 +94,8 @@
             $uid = trim($request_params["uid"]);
             $result = array("status"=>1,"msg"=>"Device limit not reached.","css"=>"alert alert-success");
             /*get count of tokens*/
-            $rdb = redisDB(0);
-            $tokens = $rdb->keys("AUTH_".$uid."_*");
+            // $rdb = redisDB(0);
+            // $tokens = $rdb->keys("AUTH_".$uid."_*");
             /*if limit reached return error*/
             if(count($tokens)>$g_device_limit)
             {
@@ -111,10 +111,10 @@
         global $g_signer;
         $headers = $request->getHeaders();
         /*if authorization token present*/
-        if(isset($headers["HTTP_AUTHORIZATION"]) && count($headers["HTTP_AUTHORIZATION"])>0)
+        if(isset($headers["HTTP_AUTHORIZATION"]) && count($headers["HTTP_AUTHORIZATION"])>0 && strlen($headers["HTTP_AUTHORIZATION"][0]) > 10 )
         {
             $token = $headers["HTTP_AUTHORIZATION"][0];
-            $rdb = redisDB(0);
+            $user_list = json_decode(file_get_contents('auth/user.json'), true);
             try{
                 $token = (new Parser())->parse((string)$token);
                 $data = new ValidationData();
@@ -126,7 +126,7 @@
             if($token->validate($data) && $token->verify($signer,$g_signer))
             {
                 $token_key = $token->getHeader("jti");
-                $server_token = $rdb->get($token_key);
+                $server_token = $user_list[$token_key];
                 $server_token = json_decode($server_token,true);
                 /*if token exists in rdb*/
                 if($server_token["token"] != $token){
@@ -163,7 +163,7 @@
             else if($token->verify($signer,$g_signer))
             {
                 $token_key = $token->getHeader("jti");
-                $server_token = $rdb->get($token_key);
+                $server_token = $user_list[$token_key];
                 $server_token = json_decode($server_token,true);
                 /*if token exists in rdb*/
                 if($server_token["token"] != $token){
@@ -184,8 +184,8 @@
 
                         $result = generate_token(hush_encrypt($user_data));
                         /*delete the old token in redis*/
-                        $rdb = redisDB(0);
-                        $rdb->del($token_key);
+                        unset($user_list[$token_key]);
+                        file_put_contents('auth/user.json', json_encode($user_list));
                         $request = $request->withAttribute('auth_token', $result);
                     }
                     catch (Exception $e) {

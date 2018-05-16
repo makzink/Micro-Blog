@@ -1,0 +1,191 @@
+.blog_container .hush_loading_wrapper
+{
+    margin-top: 10em;
+}
+
+.blog_options
+{
+    margin-top: 2em;
+}
+.blog_options .b_opt
+{
+    margin: 1em;
+}
+
+.b_card
+{
+    background-color: #FFF;
+    border-radius: 5px;
+    width: 20em;
+    height: 23em;
+    border: 1px solid #EEEEEE;
+    margin: 1em;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.10);
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.10);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.10);
+    position: relative;
+    cursor: pointer;
+}
+.b_card .b_img
+{
+    width: 100%;
+    max-height: 12em;
+}
+.b_card .b_title
+{
+    padding: 0.8em;
+    font-size: 1.2em;
+    font-style: italic;
+    font-weight: 500;
+}
+.b_card .footer
+{
+    /* padding: 0.5em; */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.b_card .b_readon
+{
+    padding: 1em;
+    font-size: 0.8em;
+    color: #4183D7;
+    font-weight: 600;
+}
+.b_card .b_auth
+{
+    padding: 0.5em;
+}
+.b_card .b_auth_name
+{
+    font-weight: 300;
+}
+.b_card .b_auth_img
+{
+    width: 1.8em;
+}
+.b_card .b_bar
+{
+    height: 5px;
+    margin-top: 0.5em;
+    background-color: #19B5FE;
+}
+/* like */
+.b_card .b_like {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    width: 4em;
+    height: 4em;
+    background-color: #fff;
+    border-radius: 50%;
+}
+.b_card .b_like :focus {
+    outline: none;
+}
+.b_card .b_like .toggle-icon {
+    width: 100%;
+    height: 100%;
+    font-size: 2.5em;
+    position: relative;
+    color: gray;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+.b_card .b_like .toggle-icon:before, .toggle-icon:after {
+    position: absolute;
+    top: 0.2em;
+    left: 0.3em;
+    transition: all .3s ease-out;
+    content: "\f08a";
+    font-family: fontawesome;
+}
+.b_card .b_like .toggle-icon:hover:before {
+    transform: scale(1.2);
+}
+.b_card .b_like .toggle-icon:active:before {
+    transition: none;
+    transform: scale(1);
+}
+.b_card .b_like .toggle-icon:after {
+    opacity: 0;
+}
+.b_card .b_like .toggle-icon.-checked {
+    color: #A12C2C;
+}
+.b_card .b_like .toggle-icon.-checked:before {
+    content: "\f004";
+}
+.b_card .b_like .toggle-icon.-checked:after {
+    content: "\f004";
+    animation: likeFly .6s ease-in;
+}
+
+@keyframes heartbeat {
+    from {
+        opacity: 1;
+    }
+    to {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+@keyframes likeFly {
+    from {
+        opacity: 1;
+    }
+    to {
+        transform: scale(3) rotate(45deg) translateY(-90px);
+        opacity: 0;
+    }
+}
+
+
+/* detail modal */
+#detail_modal .hush_loading_wrapper
+{
+    margin-top: 10em;
+    margin-bottom: 10em;
+}
+#detail_modal .dm_img
+{
+    width: 100%;
+}
+#detail_modal .dm_title
+{
+    padding: 0.8em;
+    font-size: 1.2em;
+    font-style: italic;
+    font-weight: 500;
+}
+#detail_modal .dm_data
+{
+    padding: 0.8em;
+}
+#detail_modal .dm_auth,
+#detail_modal .stats
+{
+    padding: 0.5em;
+}
+#detail_modal .dm_data .likes
+{
+    margin-left: 1em;
+}
+#detail_modal .dm_data .likes i
+{
+    color: #A12C2C;
+}
+#detail_modal .dm_auth_name
+{
+    font-weight: 300;
+}
+#detail_modal .dm_auth_img
+{
+    width: 1.8em;
+}
+#detail_modal .dm_content
+{
+    padding: 0.8em;
+    font-size: 1.2em;
+}
