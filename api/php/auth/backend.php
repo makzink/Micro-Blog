@@ -110,7 +110,6 @@
                     $token_params["usr_type"] = $token->getClaim("usr_type");
                     $token_params["email"] = $token->getClaim("email");
                     $token_params["audience"] = $token->getClaim("aud");
-                    $token_params["token_key"] = $token_key;
                 } catch (Exception $e) {
                     error_logging($e->getMessage());
                 }

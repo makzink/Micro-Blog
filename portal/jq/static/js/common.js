@@ -93,7 +93,7 @@ function signup_user()
                 if(json.status==1)
                 {
                     document.cookie = "_hush_ut=" + json.user.token_data.token + ";domain="+g_domain+";path=/";
-                    setTimeout(function(){ window.location = decodeURIComponent(json.r_url); }, 2000);
+                    setTimeout(function(){ location.reload(); }, 2000);
                 }
                 else{
                     $('.login_signup_box .status').empty().append($('<div/>').html(json.msg).addClass("alert alert-danger"));
@@ -171,7 +171,7 @@ function login_user()
                     if(json.status==1)
                     {
                         document.cookie = "_hush_ut=" + json.user.token_data.token + ";domain="+g_domain+";path=/";
-                        setTimeout(function(){ window.location = decodeURIComponent(json.r_url); }, 2000);
+                        setTimeout(function(){ location.reload(); }, 2000);
                     }
                     else{
                         $('.login_signup_box .status').empty().append($('<div/>').html(json.msg).addClass("alert alert-danger"));

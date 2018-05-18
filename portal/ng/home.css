@@ -91,8 +91,8 @@
     position: absolute;
     right: 0.5em;
     top: 0.5em;
-    width: 4em;
-    height: 4em;
+    width: 3em;
+    height: 3em;
     background-color: #fff;
     border-radius: 50%;
 }
@@ -102,7 +102,7 @@
 .b_card .b_like .toggle-icon {
     width: 100%;
     height: 100%;
-    font-size: 2.5em;
+    font-size: 2em;
     position: relative;
     color: gray;
     cursor: pointer;
@@ -111,8 +111,8 @@
 }
 .b_card .b_like .toggle-icon:before, .toggle-icon:after {
     position: absolute;
-    top: 0.2em;
-    left: 0.3em;
+    top: 0.1em;
+    left: 0.25em;
     transition: all .3s ease-out;
     content: "\f08a";
     font-family: fontawesome;
