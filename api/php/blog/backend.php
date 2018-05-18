@@ -15,6 +15,7 @@
         if(isset($request_params['b_sort']))
         {
             $b_sort = $request_params['b_sort'];
+            $b_topic = $request_params['b_topic'];
             $uid = 0;
             if(isset($token_params['uid']))
                 $uid = $token_params['uid'];
@@ -57,23 +58,26 @@
             $blog_content = array();
             foreach ($res as $key => $value) {
 
-                $value['auth_usr'] = $user_data[$value['auth_uid']]['usr'];
-                $value['auth_img'] = $user_data[$value['auth_uid']]['usr_img'];
-
-                $value['category'] = $cat_data[$value['category_id']]['category_title'];
-
-                $value['like_status'] = 0;
-                $likes = array();
-                foreach ($value['likes'] as $k => $v) {
-                    $likes[] = $v;
-                }
-                // var_dump($likes,$uid,in_array($uid, $likes),is_string($uid),is_string($uid) && in_array($uid, $likes),"-----");
-                if(is_string($uid) && in_array($uid, $likes))
+                if($b_topic == '0' || ($b_topic != '0' && $b_topic == $value['category_id']))
                 {
-                    $value['like_status'] = 1;
-                }
+                    $value['auth_usr'] = $user_data[$value['auth_uid']]['usr'];
+                    $value['auth_img'] = $user_data[$value['auth_uid']]['usr_img'];
 
-                $blog_content[] = $value;
+                    $value['category'] = $cat_data[$value['category_id']]['category_title'];
+
+                    $value['like_status'] = 0;
+                    $likes = array();
+                    foreach ($value['likes'] as $k => $v) {
+                        $likes[] = $v;
+                    }
+                    // var_dump($likes,$uid,in_array($uid, $likes),is_string($uid),is_string($uid) && in_array($uid, $likes),"-----");
+                    if(is_string($uid) && in_array($uid, $likes))
+                    {
+                        $value['like_status'] = 1;
+                    }
+
+                    $blog_content[] = $value;
+                }
             }
 
             $result = array('status'=>1,'msg'=>'Fetched blog content','content'=>$blog_content);

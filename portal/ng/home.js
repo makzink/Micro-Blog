@@ -6,6 +6,7 @@ app.controller('hush_ctrl', function($scope, $rootScope, $http, $modal) {
 
     $scope.detail_modal = false;
     $scope.b_sort = '1';
+    $scope.b_topic= '0';
 
     //login
     $scope.login_signup = function(mode)
@@ -32,6 +33,11 @@ app.controller('hush_ctrl', function($scope, $rootScope, $http, $modal) {
         fetch_blog();
     }
 
+    $scope.filter_blog = function()
+    {
+        fetch_blog();
+    }
+
     $scope.card_click = function(article_id)
     {
         read_blog(article_id);
@@ -40,6 +46,7 @@ app.controller('hush_ctrl', function($scope, $rootScope, $http, $modal) {
     function fetch_blog() {
         $scope.hush_loading = true;
         b_sort = $scope.b_sort;
+        b_topic = $scope.b_topic;
         var user_token = getCookie("_hush_ut");
         $http({
             method: 'POST',
@@ -48,7 +55,8 @@ app.controller('hush_ctrl', function($scope, $rootScope, $http, $modal) {
                 "Authorization":'Bearer '+user_token
             },
             data: {
-                'b_sort':b_sort
+                'b_sort':b_sort,
+                'b_topic':b_topic
             }
         }).then(function (json){
             $scope.hush_loading = false;

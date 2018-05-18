@@ -6,6 +6,9 @@ $(function(){
     $('.blog_options #b_sort').on('change', function() {
         fetch_blog();
     })
+    $('.blog_options #b_topic').on('change', function() {
+        fetch_blog();
+    })
     /*fetch blog content*/
     fetch_blog();
 
@@ -18,6 +21,7 @@ function fetch_blog()
     $('.blog_container .blog_list').addClass("hidden");
 
     var b_sort = $(".blog_options  #b_sort").val();
+    var b_topic = $(".blog_options  #b_topic").val();
 
     var user_token = getCookie("_hush_ut");
     $.ajax({
@@ -29,7 +33,8 @@ function fetch_blog()
         type:"POST",
         data:
         {
-            'b_sort':b_sort
+            'b_sort':b_sort,
+            'b_topic':b_topic
         },success: function( json )
         {
             $('.blog_container .hush_loading').addClass("hidden");

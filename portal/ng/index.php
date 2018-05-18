@@ -29,6 +29,18 @@
         <div class="container-fluid blog_container">
 
             <div class="blog_options">
+                <!-- Topic Selector-->
+                <div class="f_type pull-right b_opt">
+                    <div class="f10">Filter by :</div>
+                    <div class="form-group">
+                        <select class="form-control" ng-model="b_topic" ng-change="filter_blog()">
+                            <option value="0">All</option>
+                            <option value="1">Career</option>
+                            <option value="2">Culture</option>
+                            <option value="3">Compensation</option>
+                        </select>
+                    </div>
+                </div>
                 <!-- Type Selector-->
                 <div class="f_type pull-right b_opt">
                     <div class="f10">Sort by :</div>

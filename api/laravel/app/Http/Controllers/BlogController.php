@@ -24,6 +24,7 @@ class BlogController extends Controller
         if($request->has('b_sort'))
         {
             $b_sort = $request->b_sort;
+            $b_topic = $request->b_topic;
 
             $uid = 0;
             if(isset($payload['uid']))
@@ -55,23 +56,26 @@ class BlogController extends Controller
 
             $blog_content = array();
             foreach ($articles_res as $key => $value) {
-                $value['auth_usr'] = $user_data[$value['auth_uid']]['usr'];
-                $value['auth_img'] = $user_data[$value['auth_uid']]['usr_img'];
-
-                $value['category'] = $cat_data[$value['category_id']]['category_title'];
-
-                $value['like_status'] = 0;
-                $likes = array();
-                foreach ($value['likes'] as $k => $v) {
-                    $likes[] = $v;
-                }
-
-                if(is_string($uid) && in_array($uid, $likes))
+                if($b_topic == '0' || ($b_topic != '0' && $b_topic == $value['category_id']))
                 {
-                    $value['like_status'] = 1;
-                }
+                    $value['auth_usr'] = $user_data[$value['auth_uid']]['usr'];
+                    $value['auth_img'] = $user_data[$value['auth_uid']]['usr_img'];
 
-                $blog_content[] = $value;
+                    $value['category'] = $cat_data[$value['category_id']]['category_title'];
+
+                    $value['like_status'] = 0;
+                    $likes = array();
+                    foreach ($value['likes'] as $k => $v) {
+                        $likes[] = $v;
+                    }
+
+                    if(is_string($uid) && in_array($uid, $likes))
+                    {
+                        $value['like_status'] = 1;
+                    }
+
+                    $blog_content[] = $value;
+                }
             }
 
             switch ($b_sort) {
