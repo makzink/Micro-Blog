@@ -26,7 +26,7 @@
 
         <?php top_banner(); ?>
 
-        <div class="container blog_container">
+        <div class="container-fluid blog_container">
 
             <div class="blog_options">
                 <!-- Type Selector-->
@@ -81,6 +81,9 @@
 
         </div>
 
+        <div class="page_footer">
+        </div>
+
         <!-- login modal -->
         <script type="text/ng-template" id="login_modal.html">
             <div id="login_modal">
@@ -111,6 +114,7 @@
                         </div>
                         <div class="clearfix">
                             <div class="dm_cat">{{dm_data.category}}</div>
+                            <div class="dm_date">{{dm_data.date}}</div>
                         </div>
                         <div class="clearfix dm_data">
                             <div class="stats pull-left">

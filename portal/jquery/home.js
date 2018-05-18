@@ -137,6 +137,7 @@ function read_blog(article_id)
             {
                 $('#detail_modal .dm_img').attr('src',json.content.img);
                 $('#detail_modal .dm_cat').html(json.content.category);
+                $('#detail_modal .dm_date').html(json.content.date);
                 $('#detail_modal .dm_title').html(json.content.title);
                 $('#detail_modal .dm_content').html(json.content.content);
                 $('#detail_modal .likes_c').html("  "+json.content.likes_c);

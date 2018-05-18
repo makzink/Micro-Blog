@@ -140,6 +140,8 @@ class BlogController extends Controller
                 $value['category'] = $cat_data[$value['category_id']]['category_title'];
                 $value['likes_c'] = count($value['likes']);
 
+                $value['date'] = date("Y-m-d H:i:s", $value['create_time']);
+
                 $blog_content = $value;
             }
 

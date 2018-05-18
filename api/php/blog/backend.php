@@ -128,6 +128,8 @@
 
                 $blog_content['category'] = $cat_data[$blog_content['category_id']]['category_title'];
 
+                $blog_content['date'] = date("Y-m-d H:i:s", $blog_content['create_time']);
+
                 $blog_content['likes_c'] = count($blog_res['likes']);
                 $result = array('status'=>1,'msg'=>'Fetched blog content','content'=>$blog_content);
             }

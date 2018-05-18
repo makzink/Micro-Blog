@@ -24,7 +24,7 @@
 
         <?php top_banner(); ?>
 
-        <div class="container blog_container">
+        <div class="container-fluid blog_container">
 
             <div class="blog_options">
                 <!-- Type Selector-->
@@ -54,6 +54,9 @@
                 </div>
             </center>
 
+        </div>
+
+        <div class="page_footer">
         </div>
 
         <!-- blog card clone -->
@@ -102,6 +105,7 @@
                             </div>
                             <div class="clearfix">
                                 <div class="dm_cat pull-left">Card Category</div>
+                                <div class="dm_date pull-right">Card Time</div>
                             </div>
                             <div class="clearfix dm_data">
                                 <div class="stats pull-left">
