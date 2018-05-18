@@ -16,7 +16,7 @@
         {
             $b_sort = $request_params['b_sort'];
             $uid = 0;
-            if(!isset($token_params['uid']))
+            if(isset($token_params['uid']))
                 $uid = $token_params['uid'];
 
             $project = array('$project'=>array('article_id'=>1,'title'=>1,'img'=>1,'category_id'=>1,'auth_uid'=>1,'tags'=>1,'likes'=>1,'views'=>1));
@@ -63,7 +63,12 @@
                 $value['category'] = $cat_data[$value['category_id']]['category_title'];
 
                 $value['like_status'] = 0;
-                if(in_array($uid, (array)$value['likes']))
+                $likes = array();
+                foreach ($value['likes'] as $k => $v) {
+                    $likes[] = $v;
+                }
+                // var_dump($likes,$uid,in_array($uid, $likes),is_string($uid),is_string($uid) && in_array($uid, $likes),"-----");
+                if(is_string($uid) && in_array($uid, $likes))
                 {
                     $value['like_status'] = 1;
                 }

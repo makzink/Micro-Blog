@@ -76,6 +76,7 @@ function card_cloner(card_content,container)
     b_card.attr('data-bid',card_content.article_id);
     b_card.find('.b_img').attr('src',card_content.img);
     b_card.find('.b_title').html(card_content.title);
+    b_card.find('.b_cat').html(card_content.category);
     b_card.find('.b_auth_name').html(card_content.auth_usr);
 
     if(card_content.like_status == 1)
@@ -135,6 +136,7 @@ function read_blog(article_id)
             if(json.status == 1)
             {
                 $('#detail_modal .dm_img').attr('src',json.content.img);
+                $('#detail_modal .dm_cat').html(json.content.category);
                 $('#detail_modal .dm_title').html(json.content.title);
                 $('#detail_modal .dm_content').html(json.content.content);
                 $('#detail_modal .likes_c').html("  "+json.content.likes_c);

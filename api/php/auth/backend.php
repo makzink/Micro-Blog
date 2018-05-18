@@ -82,29 +82,6 @@
         return $request_params;
     }
 
-    /*check if the device limit has reached*/
-    function check_device_limit($request,$response)
-    {
-        global $g_device_limit,$g_url;
-        $result = array("status"=>0,"msg"=>"User not found.","css"=>"alert alert-danger");
-        $request_params = $request->getParsedBody();
-        if(isset($request_params["uid"]))
-        {
-            $request_params = hush_decrypt($request_params);
-            $uid = trim($request_params["uid"]);
-            $result = array("status"=>1,"msg"=>"Device limit not reached.","css"=>"alert alert-success");
-            /*get count of tokens*/
-            // $rdb = redisDB(0);
-            // $tokens = $rdb->keys("AUTH_".$uid."_*");
-            /*if limit reached return error*/
-            if(count($tokens)>$g_device_limit)
-            {
-                $result = array("status"=>0,"msg"=>"Device limit reached. Please check your mail to verify your account.","css"=>"alert alert-danger");
-            }
-        }
-        return return_response($request,$response,$result);
-    }
-
     /*verify user token*/
     function verify_token($request,$response,$next)
     {
@@ -125,126 +102,26 @@
             /*if token is valid*/
             if($token->validate($data) && $token->verify($signer,$g_signer))
             {
-                $token_key = $token->getHeader("jti");
-                $server_token = $user_list[$token_key];
-                $server_token = json_decode($server_token,true);
-                /*if token exists in rdb*/
-                if($server_token["token"] != $token){
-                    return error_response($request,$response,302,'INVALID_TOKEN');
+                // $token_key = $token->getHeader("jti");
+                $token_params = array();
+                try {
+                    $token_params["uid"] = $token->getClaim("uid");
+                    $token_params["usr"] = $token->getClaim("usr");
+                    $token_params["usr_type"] = $token->getClaim("usr_type");
+                    $token_params["email"] = $token->getClaim("email");
+                    $token_params["audience"] = $token->getClaim("aud");
+                    $token_params["token_key"] = $token_key;
+                } catch (Exception $e) {
+                    error_logging($e->getMessage());
                 }
-                /*add token details to the attributes*/
-                else
-                {
-                    /*verify referrer*/
-                    $audience = $token->getClaim("aud");
-                    $audience_host = parse_url($audience, PHP_URL_HOST);
-                    $referrer = $request->getServerParam("HTTP_REFERER");
-                    $referrer_host = parse_url($referrer, PHP_URL_HOST);
-                    if($audience==$referrer || $audience=="*")
-                    {
-                        $token_params = array();
-                        try {
-                            $token_params["uid"] = $token->getClaim("uid");
-                            $token_params["usr"] = $token->getClaim("usr");
-                            $token_params["usr_type"] = $token->getClaim("usr_type");
-                            $token_params["email"] = $token->getClaim("email");
-                            $token_params["audience"] = $token->getClaim("aud");
-                            $token_params["token_key"] = $token_key;
-                        } catch (Exception $e) {
-                            error_logging($e->getMessage());
-                        }
-                        $request = $request->withAttribute('token_params',$token_params);
-                    }
-                    else
-                        return error_response($request,$response,403,'ACCESS_DENIED');
-                }
+                $request = $request->withAttribute('token_params',$token_params);
             }
-            // if verified, but timeout
-            else if($token->verify($signer,$g_signer))
-            {
-                $token_key = $token->getHeader("jti");
-                $server_token = $user_list[$token_key];
-                $server_token = json_decode($server_token,true);
-                /*if token exists in rdb*/
-                if($server_token["token"] != $token){
-                    return error_response($request,$response,302,'INVALID_TOKEN');
-                }
-                /*add token details to the attributes*/
-                else
-                {
-                    $user_data=array();
-                    try
-                    {
-                        $user_data["uid"] = $token->getClaim("uid");
-                        $user_data["usr"] = $token->getClaim("usr");
-                        $user_data["usr_type"] = $token->getClaim("usr_type");
-                        $user_data["email"] = $token->getClaim("email");
-                        $user_data["audience"] = $token->getClaim("aud");
-                        $user_data["token_key"] = $token_key;
-
-                        $result = generate_token(hush_encrypt($user_data));
-                        /*delete the old token in redis*/
-                        unset($user_list[$token_key]);
-                        file_put_contents('auth/user.json', json_encode($user_list));
-                        $request = $request->withAttribute('auth_token', $result);
-                    }
-                    catch (Exception $e) {
-                        error_logging($e->getMessage());
-                    }
-                    $request = $request->withAttribute('token_params',$user_data);
-                }
-            }
-            /*token invalid*/
             else
                 return error_response($request,$response,302,'INVALID_TOKEN');
         }
         /*continue*/
         $response = $next($request, $response);
         return $response;
-    }
-
-    /*rate limiter*/
-    function rate_limit($request,$response,$next)
-    {
-        $rdb = redisDB(0);
-        /*get request params*/
-        $request_params = decrypt_token($request);
-        if(isset($request_params['valid_token']) && $request_params['valid_token']==0)
-        {
-            return error_response($request,$response,302,'INVALID_TOKEN');
-        }
-        if(isset($request_params["uid"]))
-        {
-            $uid = $request_params["uid"];
-            $time = time();
-            $score = $rdb->zscore("hush-ratelimit",$uid);
-            $expiry = $rdb->zscore("hush-rateexpiry",$uid);
-            if($time<$expiry)/*check if the key exists*/
-            {
-                if($score==0 || $score=="")/*if score negetive show error*/
-                    return error_response($request,$response,429,"TOO_MANY_REQUESTS");
-                else/*update the count*/
-                {
-                    /*decrement score and set score*/
-                    $score--;
-                    $rdb->zAdd("hush-ratelimit",$score,$uid);
-                }
-            }
-            else/*reset the counter*/
-                reset_ratelimit($rdb,$uid);
-        }
-        /*continue*/
-        $response = $next($request, $response);
-        return $response;
-    }
-
-    /*reset the ratelimit*/
-    function reset_ratelimit($rdb,$uid)
-    {
-        global $g_rate_limit;
-        $time = time();
-        $rdb->zAdd("hush-ratelimit",$g_rate_limit,$uid);
-        $rdb->zAdd("hush-rateexpiry",$time+60,$uid);
     }
 
     /*encrypt request params for token less authentication*/
@@ -306,17 +183,15 @@
             // var_dump($user_record);
             if($user_record == null)
             {
-                $pswd_encrypt = crypt($pswd, substr($pswd, 0, 12));
 
                 $uid = generate_uid();
                 $time = time();
-                $ip = getIP();
 
                 $user_record = array(
                     'uid' => $uid,
                     'usr' => $usr,
                     'email' => $email,
-                    'pswd' => $pswd_encrypt,
+                    'pswd' => $pswd,
                     'usr_type' => 1,
                     'create_time' => $time
                 );
@@ -326,7 +201,7 @@
                     $user_record['device_type'] = 1;
                     $token = generate_token(hush_encrypt($user_record));
                     $user_record['token_data'] = $token;
-                    $result = array('status'=>1,'msg'=>'Logged in. Please wait while we redirect you.','user'=>$user_record,'r_url'=>$g_url,'token_data'=>$token);
+                    $result = array('status'=>1,'msg'=>'Logged in. Please wait while we redirect you.',"css"=>"alert alert-success",'user'=>$user_record,'r_url'=>$request_params['r_url'],'token_data'=>$token);
                 }else{
                     $result = array("status"=>0,"msg"=>"Could not register user. Please try again","css"=>"alert alert-danger");
                 }
@@ -357,7 +232,7 @@
             if($user_record != null)
             {
                 //check pswd match
-                if (crypt($pswd, substr($user_record['pswd'], 0, 12)) == $user_record['pswd'] )
+                if ($pswd == $user_record['pswd'] )
                 {
                     unset($user_record['_id']);
                     unset($user_record['pswd']);
@@ -366,7 +241,7 @@
                     $user_apps = isset($user_record['apps'])?$user_record['apps']:array();
                     $token = generate_token(hush_encrypt($user_record),$user_apps);
                     $user_record['token_data'] = $token;
-                    $result = array('status'=>1,'msg'=>'Logged in. Please wait while we redirect you.','user'=>$user_record,'r_url'=>$g_url,'token_data'=>$token);
+                    $result = array('status'=>1,'msg'=>'Logged in. Please wait while we redirect you.',"css"=>"alert alert-success",'user'=>$user_record,'r_url'=>$request_params['r_url'],'token_data'=>$token);
                 }
 
             }else{

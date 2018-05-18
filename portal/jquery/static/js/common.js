@@ -96,6 +96,7 @@ function signup_user()
                     setTimeout(function(){ window.location = decodeURIComponent(json.r_url); }, 2000);
                 }
                 else{
+                    $('.login_signup_box .status').empty().append($('<div/>').html(json.msg).addClass("alert alert-danger"));
                     setTimeout(function(){
                         $('.login_signup_box .status').empty();
                         $('.login_signup_box .subtext').removeClass("hidden");
@@ -173,6 +174,7 @@ function login_user()
                         setTimeout(function(){ window.location = decodeURIComponent(json.r_url); }, 2000);
                     }
                     else{
+                        $('.login_signup_box .status').empty().append($('<div/>').html(json.msg).addClass("alert alert-danger"));
                         setTimeout(function(){
                             $('.login_signup_box .status').empty();
                             $('.login_signup_box .subtext').removeClass("hidden");

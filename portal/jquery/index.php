@@ -16,7 +16,6 @@
     	<title>Blog | Kazmik Corp.</title>
         <meta name="description" content="">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="static/css/common.css">
         <link rel="stylesheet" href="home.css">
@@ -66,6 +65,9 @@
                 <img class="b_img" src="https://www.asknisa.org/wp-content/themes/ri-charitable/images/placeholder.jpg"/>
             </div>
             <div class="clearfix">
+                <div class="b_cat pull-left">Card Category</div>
+            </div>
+            <div class="clearfix">
                 <div class="b_title">Card Title</div>
             </div>
             <div class="footer clearfix">
@@ -97,6 +99,9 @@
                             </div>
                             <div class="clearfix">
                                 <div class="dm_title">Card Title</div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="dm_cat pull-left">Card Category</div>
                             </div>
                             <div class="clearfix dm_data">
                                 <div class="stats pull-left">
