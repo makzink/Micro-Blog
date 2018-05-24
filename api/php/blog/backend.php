@@ -20,7 +20,7 @@
             if(isset($token_params['uid']))
                 $uid = $token_params['uid'];
 
-            $project = array('$project'=>array('article_id'=>1,'title'=>1,'img'=>1,'category_id'=>1,'auth_uid'=>1,'tags'=>1,'likes'=>1,'views'=>1));
+            $project = array('$project'=>array('article_id'=>1,'title'=>1,'img'=>1,'category_id'=>1,'auth_uid'=>1,'tags'=>1,'likes'=>1,'views'=>1,'create_time'=>1));
             $addFields = array('$addFields'=>array('like_c'=>array('$size'=>'$likes')));
             $sort = array('$sort'=>array());
             switch ($b_sort) {
