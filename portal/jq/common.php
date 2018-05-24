@@ -18,6 +18,7 @@
                         <li onclick="logout_user();"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                     <?php } ?>
                 </ul>
+            </div>
         </nav>
 
         <?php if(!isset($_COOKIE[$g_cookie_prefix.'ut'])){ ?>

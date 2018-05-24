@@ -93,6 +93,14 @@
                         <div class="clearfix"></div>
                         <div class="card_tag">Frontend : Angular<br/>Backend : Laravel</div>
                 </div>
+
+                <!-- set 3 -->
+                <div class="mb_card pull-left">
+                    <a href="http://rc.kazmik.in/">
+                        <div class="card_head">SET III</div>
+                        <div class="clearfix"></div>
+                        <div class="card_tag">Frontend : ReactJS<br/>Backend : Slim</div>
+                </div>
             </div>
 
         </div>
