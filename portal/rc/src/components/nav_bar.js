@@ -16,7 +16,7 @@ class NavBar extends React.Component {
         const navbar_style = {backgroundcolor: '#f8f8f8'};
         const usr_token = cookie.load('_hust_ut');
 
-        const nav_btn = ((usr_token == undefined)?1:0) ? (
+        const nav_btn = ((usr_token === undefined)?1:0) ? (
             <ul className="nav navbar-nav navbar-right">
                 {/*
                 <li onClick={() => this.login_signup(1)}><a href="#"><span className="glyphicon glyphicon-user"></span> Sign Up</a></li>
